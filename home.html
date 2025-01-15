@@ -14,7 +14,6 @@
     body {
       font-family: Arial, sans-serif;
       line-height: 1.6;
-      padding: 10px;
       background-color: #f9f9f9;
     }
     a {
@@ -27,40 +26,75 @@
 
     /* Header Styles */
     .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       background-color: #007BFF;
       color: #fff;
       padding: 10px;
-      text-align: center;
     }
-    .header h1 {
-      font-size: 1.8rem;
+    .logo {
+      display: flex;
+      align-items: center;
     }
-    .header nav {
-      margin-top: 10px;
+    .logo img {
+      max-height: 40px;
+      margin-right: 10px;
     }
-    .header nav a {
-      margin: 0 10px;
-      font-size: 1rem;
+    .logo span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .header-icons {
+      display: flex;
+      align-items: center;
+    }
+    .header-icons svg {
+      width: 24px;
+      height: 24px;
+      margin-left: 15px;
+      fill: #fff;
+      cursor: pointer;
     }
 
     /* Info Box Component */
     .info-box {
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 5px;
       padding: 15px;
       background-color: #fff;
-      margin-bottom: 20px;
+      margin: 10px;
+      font-size: 0.9rem;
     }
-    .info-box h2 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
+
+    /* Breadcrumb Styles */
+    .breadcrumbs {
+      margin: 10px;
+      font-size: 0.9rem;
+    }
+    .breadcrumbs a {
+      color: #007BFF;
+    }
+
+    /* Article Title */
+    .article-title {
+      margin: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* Article Metadata */
+    .metadata {
+      margin: 10px;
+      font-size: 0.9rem;
+      color: #666;
     }
 
     /* Section Component */
     .section {
       background-color: #fff;
       padding: 15px;
-      margin-bottom: 20px;
+      margin: 10px;
       border-radius: 5px;
       border: 1px solid #ddd;
     }
@@ -75,32 +109,48 @@
       padding: 10px;
       font-size: 0.9rem;
       color: #666;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
     }
   </style>
 </head>
 <body>
   <!-- Header Component -->
   <header class="header">
-    <h1>Math Optimization Articles</h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Topics</a>
-      <a href="#">About</a>
-    </nav>
+    <div class="logo">
+      <img src="logo-placeholder.png" alt="Logo">
+      <span>Math Articles</span>
+    </div>
+    <div class="header-icons">
+      <!-- Icons can be replaced with actual SVGs or FontAwesome icons -->
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2V7zm1 8c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z"></path></svg>
+    </div>
   </header>
 
   <!-- Info Box Component -->
   <div class="info-box">
-    <h2>Welcome Note</h2>
     <p>This website is dedicated to publishing articles on mathematical optimization. Feel free to browse, learn, and contribute!</p>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="#">Home</a> > <a href="#">Articles</a> > Damage Calculation
+  </div>
+
+  <!-- Article Title -->
+  <div class="article-title">Damage Calculation</div>
+
+  <!-- Article Metadata -->
+  <div class="metadata">
+    Updated: January 19, 2024 | Reads: 4,240
   </div>
 
   <!-- Article Section -->
   <div class="section">
-    <h3>Title: Damage Calculation</h3>
-    <p>This article discusses the formula for calculating damage in a mathematical optimization context.</p>
-    <p><strong>Formula:</strong></p>
-    <p>Damage = Attack × (1 + Bonus)</p>
+    <h3>Calculation Formula</h3>
+    <p>This section discusses the formula for calculating damage:</p>
+    <p><strong>Damage = Base Attack × (1 + Bonus Coefficients)</strong></p>
   </div>
 
   <!-- Footer -->
