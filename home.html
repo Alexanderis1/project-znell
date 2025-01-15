@@ -31,9 +31,13 @@
 
     /* Header Styles */
     .header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       background: linear-gradient(135deg, #FFDD44, #FFBB33);
       color: #000;
-      padding: 60px 20px;
+      padding: 80px 20px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -64,13 +68,13 @@
       font-weight: bold;
       font-family: 'Merriweather', serif;
       color: #fff; /* White text for contrast */
-      margin-bottom: 10px;
       position: relative;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       display: inline-block;
-      padding: 10px 20px;
+      padding: 20px 40px;
       border: 3px solid #000;
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      z-index: 3;
     }
     .header p {
       font-size: 1.2rem;
@@ -103,13 +107,13 @@
       margin: 20px 0;
       color: #FFDD44;
       text-align: center;
-      margin-bottom: 10px;
       position: relative;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       display: inline-block;
-      padding: 10px 20px;
+      padding: 20px 40px;
       border: 3px solid #FFDD44;
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      z-index: 3;
     }
 
     /* Section Component */
@@ -155,6 +159,17 @@
       color: #FFDD44;
       background-color: #000;
       border-top: 3px solid #FFDD44;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5rem; /* Adjust font size for smaller screens */
+        padding: 15px 30px;
+      }
+      .header p {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
