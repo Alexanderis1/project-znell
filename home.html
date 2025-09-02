@@ -175,6 +175,18 @@
         font-size: 0.9rem;
       }
     }
+
+    .image-container {
+      display: flex;
+      justify-content: center;  /* center horizontally */
+    }
+
+    .image-container img {
+      max-width: 100%;   /* shrink on smaller screens */
+      height: auto;      /* keep aspect ratio */
+      width: auto;       /* don’t force scaling */
+      display: block;    /* avoids small inline spacing */
+    }
   </style>
 </head>
 <body>
@@ -214,7 +226,9 @@
   <div class="section">
     <h3>+20</h3>
     <p><strong>Tinctures</strong></p>
-    <img src="img/tinctures20.png"></img>
+    <div class="image-container">
+      <img src="img/tinctures20.png"></img>
+    </div>
   </div>
 
   <!-- Footer -->
