@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Secret Playbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+
+    :root{
+      --ink:#e9e9e9;
+      --bg-1:#0b0b0b; --bg-2:#1a1a1a; /* desk */
+      --paper:#171717; /* dossier paper */
+      --paper-2:#1f1f1f; /* secondary */
+      --accent:#8d0a0a; /* wax/red */
+      --accent-2:#2b2b2b; /* metal */
+      --gold:#a79a6d;
+      --radius:14px;
+      --gap:clamp(10px,2.5vw,18px);
+      --f: clamp(15px,1.35vw,18px);
+      --h1: clamp(1.6rem,3vw + .6rem,2.4rem);
+      --h3: clamp(1.1rem,1.6vw + .5rem,1.5rem);
+      --seal: clamp(70px,18vw,120px);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; font-size:var(--f); color:var(--ink);
+      background:
+        radial-gradient(60% 40% at 10% 5%, var(--bg-1) 0%, var(--bg-2) 100%) fixed,
+        linear-gradient(135deg,var(--bg-1),var(--bg-2));
+      background-blend-mode:multiply;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{max-width:1000px; margin:auto; padding: clamp(8px, 2.5vw, 20px)}
+    .book{background:var(--paper); border-radius:var(--radius); box-shadow:0 24px 60px rgba(0,0,0,.6), inset 0 0 0 2px rgba(255,255,255,.04); position:relative; overflow:hidden}
+    .book:before{content:""; position:absolute; inset:0; background:
+      linear-gradient(transparent, rgba(255,255,255,.03)),
+      repeating-linear-gradient(0deg, transparent 0 22px, rgba(255,255,255,.025) 22px 23px);
+      pointer-events:none}
+
+    /* Header */
+    .header{ position:relative; text-align:center; padding: clamp(16px,4vw,28px) clamp(10px,3vw,20px) 12px }
+    .logo{ position:absolute; left:50%; transform:translateX(-50%); top: calc(var(--seal)*-0.3) }
+    .seal{ width:var(--seal); height:var(--seal); border-radius:50%; display:grid; place-items:center; color:#fff; font-family: "MedievalSharp", cursive; font-size: clamp(18px,4.6vw,26px); letter-spacing:1px; background: radial-gradient(circle at 30% 30%, #cf484e, #8f161c 60%, #670b10); box-shadow:0 12px 20px rgba(0,0,0,.55), inset 0 6px 12px rgba(255,255,255,.2); position:relative }
+    .seal:after{ content:"CLASSIFIED"; position:absolute; inset:auto 6px 10px 6px; text-align:center; font-size:clamp(9px,2.6vw,12px); opacity:.9; letter-spacing:2px }
+    @media (max-width:420px){ .logo{ display:none } }
+
+    h1{ margin: clamp(36px,8vw,70px) 0 6px; font-weight:800; font-size:var(--h1); letter-spacing:.5px }
+    h1 .brand{ color:var(--accent) }
+
+    /* Breadcrumbs */
+    .crumbs{ display:inline-flex; gap:6px; align-items:center; margin: 10px clamp(8px, 2vw, 16px) 0; padding:6px 10px; background: #131313; border:1px dashed #333; border-radius:10px; font-weight:600; color:#bdbdbd; box-shadow:0 2px 0 rgba(0,0,0,.5) }
+    .crumbs a{ color:#bdbdbd; text-decoration:none }
+    .crumbs a:hover{ text-decoration:underline }
+
+    .title-wrap{ display:flex; justify-content:center; padding:8px 16px 0 }
+    .title{ position:relative; border:2px solid var(--accent); border-radius:12px; padding:10px 18px; text-transform:uppercase; letter-spacing:1px; background:linear-gradient(#1c1c1c,#161616); box-shadow:0 4px 0 rgba(141,10,10,.25); font-weight:800 }
+    .title:before{ content:"SEALED"; position:absolute; top:-14px; right:-14px; background:var(--accent); color:#fff; padding:4px 10px; border-radius:8px; transform:rotate(4deg); font-family:"MedievalSharp", cursive; letter-spacing:3px; box-shadow:0 6px 14px rgba(141,10,10,.4) }
+
+    /* Tabs */
+    .tabs{ position:sticky; top:0; z-index:5; background: linear-gradient(180deg, rgba(23,23,23,.96), rgba(23,23,23,.85)); backdrop-filter:saturate(1.06) blur(3px); padding:8px 10px; display:flex; gap:8px; overflow:auto; -webkit-overflow-scrolling:touch; border-bottom:1px solid #333; scroll-snap-type:x mandatory }
+    .tab{ scroll-snap-align:start; white-space:nowrap; padding:10px 12px; border-radius:10px; font-weight:700; font-size:.95rem; background:#1d1d1d; border:1px solid #2f2f2f; color:#d5d5d5; box-shadow:0 2px 0 rgba(0,0,0,.6) }
+    .tab.active{ background:#232323; border-color:#3a3a3a }
+
+    .page{ padding:0 8px 16px }
+    .section{ max-width:1000px; margin: var(--gap) auto; padding: clamp(12px,2.6vw,18px) clamp(10px,2.4vw,16px) clamp(12px,2.6vw,18px) clamp(14px,3.4vw,22px); background:linear-gradient(#1c1c1c,#161616); border:1px dashed #3a3a3a; border-radius:14px; box-shadow:0 12px 26px rgba(0,0,0,.5); position:relative; overflow:hidden; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), 95% 100%, 88% calc(100% - 10px), 82% 100%, 74% calc(100% - 12px), 66% 100%, 0 100%) }
+    .section h3{ font-size:var(--h3); margin:0 0 8px }
+    .section p, .section li{ line-height:1.7; color:#d8d8d8 }
+
+    .callout{ background:#202020; border:1px solid #333; border-radius:10px; padding:10px 12px; font-weight:700; color:#f1f1f1 }
+    code{ background:#262626; padding:.2em .35em; border-radius:6px }
+
+    .grid{ display:grid; gap:14px }
+    .grid.cols-2{ grid-template-columns:1fr }
+    @media(min-width:760px){ .grid.cols-2{ grid-template-columns:1fr 1fr } }
+
+    .image-container{ display:flex; justify-content:center }
+    .image-container img{ max-width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 8px 18px rgba(0,0,0,.5) }
+
+    .footer{ text-align:center; color:#bdbdbd; padding:18px; font-size:.95rem }
+
+    /* Calculator */
+    .calc{ background:var(--paper-2); border:1px solid #2f2f2f; border-radius:12px; padding:12px; display:grid; gap:10px }
+    .calc h4{ margin:0 0 6px; font-size:1.05rem }
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+    .row label{ display:grid; gap:6px; font-weight:600; color:#e3e3e3 }
+    .row input[type="number"]{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #3a3a3a; background:#141414; color:#f5f5f5 }
+    .row .hint{ font-size:.85em; color:#b1b1b1 }
+    .btn{ appearance:none; border:1px solid #3a3a3a; background:#1f1f1f; color:#fff; padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; box-shadow:0 2px 0 rgba(0,0,0,.6) }
+    .btn:hover{ background:#252525 }
+    .result{ background:#181818; border:1px dashed #3a3a3a; border-radius:10px; padding:10px 12px; display:grid; gap:6px }
+    .winner{ color:#92ff89; font-weight:800 }
+    .muted{ color:#bdbdbd }
+    table{ width:100%; border-collapse:collapse; overflow:auto; font-variant-numeric:tabular-nums }
+    th,td{ padding:8px 10px; border-bottom:1px solid #2a2a2a; text-align:right }
+    th:first-child, td:first-child{ text-align:left }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="book">
+      <div class="header">
+        <div class="logo" aria-hidden="true"><div class="seal">ZP</div></div>
+        <h1><span class="brand">Znell</span> Project</h1>
+      </div>
+
+      <div class="crumbs"><a href="#">Home</a> > <a href="#">Tools</a> > The Secret Playbook</div>
+
+      <div class="title-wrap"><div class="title">The Secret Playbook</div></div>
+
+      <nav class="tabs" aria-label="Sections">
+        <a class="tab active" href="#intro">Intro</a>
+        <a class="tab" href="#principles">Core Principles</a>
+        <a class="tab" href="#routes">Farming Routes</a>
+        <a class="tab" href="#calc">Route EV Calculator</a>
+        <a class="tab" href="#notes">Notes</a>
+      </nav>
+
+      <div class="page">
+        <section id="intro" class="section">
+          <h3>Briefing</h3>
+          <p>This dossier consolidates efficient <strong>farming & grinding</strong> patterns. It favors predictable profit, low travel dead-time, and quick decision rules. Use the calculator to adapt to your server’s live prices.</p>
+          <div class="callout">Protocol: <code>track → model → iterate</code>. If variance spikes, downshift to a safer route.</div>
+        </section>
+
+        <section id="principles" class="section">
+          <h3>Operating Principles</h3>
+          <ul>
+            <li><strong>EV per hour</strong> beats single lucky drops—rank routes on expected value, not anecdotes.</li>
+            <li><strong>Dead-time matters:</strong> seconds spent traveling are seconds not rolling for value.</li>
+            <li><strong>Guardrails:</strong> define a budget‑stop before upgrading or gambles.</li>
+            <li><strong>Iteration:</strong> change one variable at a time; log outcomes.</li>
+          </ul>
+        </section>
+
+        <section id="routes" class="section">
+          <h3>Preset Routes (editable in code)</h3>
+          <p class="muted">Defaults below are assumptions; the calculator will use <em>your</em> live prices to rank them.</p>
+          <div class="grid cols-2">
+            <div>
+              <p><strong>Route A – Back Alleys</strong><br><span class="muted">High node density, low travel.</span></p>
+              <ul>
+                <li>Shards: 120 / h</li>
+                <li>Scraps: 300 / h</li>
+                <li>Emblems: 1.2 / h</li>
+                <li>Cost: 50 / h (consumables)</li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>Route B – Smuggler’s Wharf</strong><br><span class="muted">Lower density, rare drops ↑.</span></p>
+              <ul>
+                <li>Shards: 70 / h</li>
+                <li>Scraps: 200 / h</li>
+                <li>Emblems: 2.1 / h</li>
+                <li>Cost: 60 / h</li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>Route C – Ruined Keep</strong><br><span class="muted">Travel time ↑, jackpot artifact chance.</span></p>
+              <ul>
+                <li>Shards: 40 / h</li>
+                <li>Scraps: 150 / h</li>
+                <li>Emblems: 1.0 / h</li>
+                <li>Relics: 0.25 / h</li>
+                <li>Cost: 45 / h</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="calc" class="section">
+          <h3>Route EV Calculator</h3>
+          <div class="calc" role="form" aria-label="Expected value calculator">
+            <h4>Enter your current market prices</h4>
+            <div class="row">
+              <label>Shard value
+                <input type="number" id="price-shard" min="0" step="0.01" placeholder="e.g., 5.5" inputmode="decimal" />
+                <span class="hint">per item</span>
+              </label>
+              <label>Scrap value
+                <input type="number" id="price-scrap" min="0" step="0.01" placeholder="e.g., 1.2" inputmode="decimal" />
+                <span class="hint">per item</span>
+              </label>
+            </div>
+            <div class="row">
+              <label>Emblem value
+                <input type="number" id="price-emblem" min="0" step="0.01" placeholder="e.g., 120" inputmode="decimal" />
+                <span class="hint">per item</span>
+              </label>
+              <label>Relic value (optional)
+                <input type="number" id="price-relic" min="0" step="0.01" placeholder="e.g., 600" inputmode="decimal" />
+                <span class="hint">per item</span>
+              </label>
+            </div>
+            <div class="row">
+              <label>Server bonus %
+                <input type="number" id="server-bonus" min="-50" max="200" step="1" value="0" />
+                <span class="hint">affects all yields (events, holidays, etc.)</span>
+              </label>
+              <label>Consumable Cost / h (override)
+                <input type="number" id="cost-hour" min="0" step="0.01" placeholder="leave blank to use route defaults" />
+                <span class="hint">optional global override</span>
+              </label>
+            </div>
+            <button class="btn" id="compute">Compute Best Route</button>
+            <div class="result" id="result" aria-live="polite"></div>
+            <div class="result" id="table-wrap" hidden>
+              <table id="tbl"><thead><tr><th>Route</th><th>EV/h</th><th>EV/min</th><th>Notes</th></tr></thead><tbody></tbody></table>
+            </div>
+          </div>
+        </section>
+
+        <section id="notes" class="section">
+          <h3>Notes</h3>
+          <ul>
+            <li>EV = Σ(items_per_hour × price) − cost_per_hour. Server bonus multiplies all item rates.</li>
+            <li>Set a <em>budget-stop</em> for upgrades and craft chains to avoid chasing variance.</li>
+            <li>Record outcomes and tweak one variable at a time.</li>
+          </ul>
+        </section>
+      </div>
+
+      <footer class="footer">© 2025 The Secret Playbook — Rogue's Dossier</footer>
+    </div>
+  </div>
+
+  <script>
+    // Sticky tab activation
+    const tabs = [...document.querySelectorAll('.tabs .tab')];
+    const sections = tabs.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const setActive = id => tabs.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+id));
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting) setActive(e.target.id); });
+    }, {rootMargin:'-40% 0px -55% 0px'});
+    sections.forEach(s=>io.observe(s));
+
+    // ------- EV Calculator -------
+    const ROUTES = [
+      {id:'A', name:'Back Alleys', cost:50, items:{ shard:120, scrap:300, emblem:1.2, relic:0 }},
+      {id:'B', name:'Smuggler\'s Wharf', cost:60, items:{ shard:70, scrap:200, emblem:2.1, relic:0 }},
+      {id:'C', name:'Ruined Keep', cost:45, items:{ shard:40, scrap:150, emblem:1.0, relic:0.25 }},
+    ];
+
+    function readNumber(id){
+      const el = document.getElementById(id);
+      if(!el) return NaN;
+      const v = el.value.trim();
+      return v==='' ? NaN : Number(v);
+    }
+
+    function computeEV(route, prices, bonusPct, overrideCost){
+      const m = 1 + (bonusPct||0)/100;
+      const perHour = route.items;
+      const value = (perHour.shard * (prices.shard||0)
+                   + perHour.scrap * (prices.scrap||0)
+                   + perHour.emblem * (prices.emblem||0)
+                   + perHour.relic * (prices.relic||0)) * m;
+      const cost = Number.isFinite(overrideCost) ? overrideCost : route.cost;
+      const evh = value - cost;
+      return { evh, evm: evh/60 };
+    }
+
+    function fmt(n){ return (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+    function runCalc(){
+      const prices = {
+        shard: readNumber('price-shard') || 0,
+        scrap: readNumber('price-scrap') || 0,
+        emblem: readNumber('price-emblem') || 0,
+        relic: readNumber('price-relic') || 0,
+      };
+      const bonus = readNumber('server-bonus') || 0;
+      const overrideCost = readNumber('cost-hour');
+      const costOverride = Number.isFinite(overrideCost) ? overrideCost : undefined;
+
+      const scored = ROUTES.map(r=>{
+        const res = computeEV(r, prices, bonus, costOverride);
+        return { id:r.id, name:r.name, cost: Number.isFinite(costOverride)? costOverride : r.cost, ...res };
+      }).sort((a,b)=> b.evh - a.evh);
+
+      const best = scored[0];
+      const result = document.getElementById('result');
+      if(!best || (prices.shard+prices.scrap+prices.emblem+prices.relic)===0){
+        result.innerHTML = '<span class="muted">Enter at least one price to get a recommendation.</span>';
+        document.getElementById('table-wrap').hidden = true;
+        return;
+      }
+      result.innerHTML = `<div class="winner">Best route: ${best.name}</div>
+        <div>EV/h: <strong>${fmt(best.evh)}</strong> — EV/min: <strong>${fmt(best.evm)}</strong></div>
+        <div class="muted">Assuming cost/h = ${fmt(best.cost)} and server bonus = ${bonus}%</div>`;
+
+      // table
+      const tbody = document.querySelector('#tbl tbody');
+      tbody.innerHTML = '';
+      scored.forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.name}</td><td>${fmt(r.evh)}</td><td>${fmt(r.evm)}</td><td class="muted">cost/h ${fmt(r.cost)}</td>`;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('table-wrap').hidden = false;
+    }
+
+    document.getElementById('compute').addEventListener('click', runCalc);
+
+    // --- Minimal tests (run with ?test=1) ---
+    if (location.search.includes('test=1')){
+      (function(){
+        // Set prices
+        document.getElementById('price-shard').value = '5';
+        document.getElementById('price-scrap').value = '1';
+        document.getElementById('price-emblem').value = '120';
+        document.getElementById('price-relic').value = '600';
+        document.getElementById('server-bonus').value = '0';
+        runCalc();
+        const top = document.querySelector('#tbl tbody tr td');
+        console.log('Test – table rendered:', !!top);
+      })();
+    }
+  </script>
+</body>
+</html>
