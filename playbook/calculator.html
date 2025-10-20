@@ -190,7 +190,7 @@
             const shard = Math.max(((Math.max(sere, master)*5)/6), tincs/12);
             const tear = (6*tincs)/58.14;
             const solo_s87 = (((7*34.22 + 25*green + 30*tear + 12*shard + 34*tincs + 68*sere + 68*master + 17*310)/57)*60)/1000;
-            const ardir_b_average = (tincs*3 + sere*7 + master*7 + (tincs/150)*10*3 + 500)*15;
+            const ardir_b_average = ((tincs*3 + sere*7 + master*7 + (tincs/150)*10*3 + 500)*15)/1000;
             const result = document.getElementById('result');
             
             const best = Math.max(solo_s87, ardir_b_average);
@@ -215,3 +215,4 @@
 </body>
 
 </html>
+
