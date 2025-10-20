@@ -191,7 +191,7 @@
             const tear = (6*tincs)/58.14;
             const solo_s87 = (((7*34.22 + 25*green + 30*tear + 12*shard + 34*tincs + 68*sere + 68*master + 17*310)/57)*60)/1000;
             const result = document.getElementById('result');
-            result.textContent = `Farming Ottimale =  Solo Sigs87, G/h = ${fmt(solo_s87)}`;
+            result.textContent = `Best Farming Strat =  Solo Sigs87, G/h = ${fmt(solo_s87)}`;
             const tbody = document.querySelector('#tbl tbody');
             tbody.innerHTML = `<tr><td>Solo Sigs87</td><td>${fmt(solo_s87)}</td></tr>`;
             document.getElementById('table-wrap').hidden = false;
