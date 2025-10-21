@@ -1,1 +1,201 @@
-d
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Upgrade Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        :root{--ink:#e9e9e9;--bg1:#0b0b0b;--bg2:#1a1a1a;--paper:#171717;--paper2:#1f1f1f;--accent:#8d0a0a;--radius:14px;--gap:clamp(10px,2.5vw,18px);--f:clamp(15px,1.35vw,18px);--h1:clamp(1.4rem,2.6vw + .6rem,2.2rem)}
+        *{box-sizing:border-box}
+        body{margin:0;font:var(--f) Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:radial-gradient(60% 40% at 10% 5%,var(--bg1),var(--bg2)) fixed,linear-gradient(135deg,var(--bg1),var(--bg2));background-blend-mode:multiply}
+        .wrap{max-width:900px;margin:auto;padding:clamp(8px,2.5vw,20px)}
+        .book{background:var(--paper);border-radius:var(--radius);box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,255,255,.04);overflow:hidden}
+        .header{padding:clamp(14px,3vw,24px)}
+        h1{margin:0 0 6px;font-weight:800;font-size:var(--h1)}
+        .crumbs{margin:0 0 10px;color:#bdbdbd}
+        .crumbs a{color:#bdbdbd;text-decoration:none}
+        .section{margin:var(--gap);padding:clamp(12px,2.6vw,18px);background:linear-gradient(#1c1c1c,#161616);border:1px dashed #3a3a3a;border-radius:14px;box-shadow:0 12px 26px rgba(0,0,0,.5)}
+        .calc{background:var(--paper2);border:1px solid #2f2f2f;border-radius:12px;padding:12px;display:grid;gap:10px}
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .row label{display:grid;gap:6px;font-weight:600;color:#e3e3e3}
+        input[type="number"],input[type="text"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #3a3a3a;background:#141414;color:#f5f5f5}
+        .btn{appearance:none;border:1px solid #3a3a3a;background:#1f1f1f;color:#fff;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.6)}
+        .btn:hover{background:#252525}
+        .result{background:#181818;border:1px dashed #3a3a3a;border-radius:10px;padding:10px 12px;display:grid;gap:6px}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:8px 10px;border-bottom:1px solid #2a2a2a;text-align:right}
+        th:first-child,td:first-child{text-align:left}
+        .row.eight {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        @media (min-width: 480px) { .row.eight { grid-template-columns: repeat(2, minmax(60px, 1fr)); } }
+        @media (min-width: 640px) { .row.eight { grid-template-columns: repeat(4, minmax(60px, 1fr)); } }
+        @media (min-width: 992px) { .row.eight { grid-template-columns: repeat(6, minmax(60px, 1fr)); } }
+        @media (min-width: 1200px){ .row.eight { grid-template-columns: repeat(8, minmax(60px, 1fr)); } }
+
+        .icon-input {
+            display: flex;
+            flex-direction: column;     /* stack icon above input */
+            align-items: center;        /* center horizontally */
+            justify-content: center;    /* center vertically if needed */
+            gap: 4px;
+            text-align: center;
+        }
+
+        .icon-input img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;             /* ensure icon is centered in its own box */
+        }
+
+        .input-compact {
+            max-width: 80px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: 1px solid #3a3a3a;
+            background: #141414;
+            color: #f5f5f5;
+        }
+
+            /* Optional: subtle hover effect */
+        .input-compact:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        /* bottom-right result stamp */
+        .calc-stamp {
+            position: fixed;          /* attach to viewport */
+            right: 16px;
+            bottom: 16px;
+            width: clamp(80px, 18vw, 160px);
+            height: auto;
+            opacity: 0;
+            transform: translateY(16px) scale(0.96);
+            transition: opacity .35s ease, transform .35s ease;
+            pointer-events: none;     /* purely decorative unless you enable dismiss */
+            z-index: 60;              /* above cards */
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,.5));
+        }
+
+        .calc-stamp.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* optional: tighter bottom spacing on tiny screens */
+        @media (max-width: 420px) {
+            .calc-stamp { right: 10px; bottom: 10px; }
+        }
+
+        /* a11y: reduce motion users */
+        @media (prefers-reduced-motion: reduce) {
+            .calc-stamp {
+                transition: none;
+                transform: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="book">
+            <header class="header">
+                <div class="crumbs"><a href="index.html">Home</a> > <a href="tools.html">Tools</a> > <span>Upgrade Planner</span></div>
+                <h1>Upgrade Planner</h1>
+                <p class="muted">Understand and Prepare the Materials you need to get you Upp!</p>
+                <p class="muted">Simulated over 10000+ successful Upps, Lowering from 12, 14 and 16.</p>
+            </header>
+
+
+            <section class="section">
+                <p class="muted">Desired Upp</p>
+                <div class="calc" role="form" aria-label="Calculator form">
+                        <img src="../img/black.png" style="text-align: center;">
+                        <label class="icon-input">+
+                            <input type="number" class="input-compact" id="upp"  placeholder="22" aria-label="tincs">
+                        </label>
+
+                </div>
+                <button class="btn" id="compute">Compute</button>
+                <div class="result" id="result" aria-live="polite"></div>
+                    <div class="result" id="table-wrap" hidden>
+                        <table id="tbl"><thead><tr><th>Item</th><th>Amount</th></tr></thead><tbody></tbody></table>
+                    </div>
+                    <img
+                        id="calc-stamp"
+                        class="calc-stamp"
+                        src="../img/ouxiie.png"
+                        alt="ouxiie"
+                        aria-hidden="true"
+                    />
+                </div>
+            </section>
+
+            <footer class="section" style="text-align:center">© 2025 Znell Project — Alexanderis' Secret Playbook</footer>
+        </div>
+    </div>
+
+
+    <script>
+        function fmt(n){return (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+        function compute(){
+            const upp = Number(document.getElementById('upp').value||0);
+
+
+            const result = document.getElementById('result');
+            
+
+            if (upp == 22) {
+                const tbody = document.querySelector('#tbl tbody');
+                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>8865</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>17000</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>17000</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>7300</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>770</td></tr>`;
+                document.getElementById('table-wrap').hidden = false;
+                const stamp = document.getElementById('calc-stamp');
+                if (stamp) {
+                    stamp.classList.add('show');
+                }
+            } else if (upp == 21){
+                const tbody = document.querySelector('#tbl tbody');
+                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>825</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>1586</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>1586</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>689</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>66</td></tr>`;
+                document.getElementById('table-wrap').hidden = false;
+                const stamp = document.getElementById('calc-stamp');
+                if (stamp) {
+                    stamp.classList.add('show');
+                }
+            } else if (upp == 20){
+                const tbody = document.querySelector('#tbl tbody');
+                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>167</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>330</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>330</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>144</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>12</td></tr>`;
+                document.getElementById('table-wrap').hidden = false;
+                const stamp = document.getElementById('calc-stamp');
+                if (stamp) {
+                    stamp.classList.add('show');
+                }
+            } else if (upp == 23){
+                const tbody = document.querySelector('#tbl tbody');
+                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>35000</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>67000</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>67000</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>29000</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>3080</td></tr>`;
+                document.getElementById('table-wrap').hidden = false;
+                const stamp = document.getElementById('calc-stamp');
+                if (stamp) {
+                    stamp.classList.add('show');
+                }
+            
+            
+            
+            
+            
+        }
+        document.getElementById('compute').addEventListener('click', compute);
+
+
+    </script>
+</body>
+
+</html>
