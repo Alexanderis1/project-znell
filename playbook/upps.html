@@ -102,7 +102,33 @@
                 transform: none;
             }
         }
-
+        .faded-bg {
+          position: relative;
+          background-image: url("../img/black.png");
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          border-radius: 14px;
+          overflow: hidden;
+          min-height: 300px; /* or whatever fits your layout */
+        }
+        
+        /* semi-transparent black overlay to create fade effect */
+        .faded-bg::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.45);  /* controls the fade strength */
+          z-index: 1;
+        }
+        
+        /* actual content above the overlay */
+        .faded-bg .content {
+          position: relative;
+          z-index: 2;
+          padding: 2rem;
+          color: white;
+        }
     </style>
 </head>
 <body>
@@ -118,12 +144,13 @@
 
             <section class="section">
                 <p class="muted">Desired Upp</p>
-                <div class="calc" role="form" aria-label="Calculator form">
+                <div class="faded-bg">
+                    <div class="calc content" role="form" aria-label="Calculator form">
                         <img src="../img/black.png" style="text-align: center;">
                         <label class="icon-input">+
                             <input type="number" class="input-compact" id="upp"  placeholder="22" aria-label="tincs">
                         </label>
-
+                    </div>
                 </div>
                 <button class="btn" id="compute">Compute</button>
                 <div class="result" id="result" aria-live="polite"></div>
