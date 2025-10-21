@@ -104,31 +104,32 @@
         }
         .faded-bg {
           position: relative;
-          background-image: url("../img/black.png");
+          background-image: url("assets/images/bg-market.jpg"); /* your image here */
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
-          border-radius: 14px;
-          overflow: hidden;
-          min-height: 300px; /* or whatever fits your layout */
+          min-height: 300px;              /* or whatever fits your layout */
+          border-radius: 14px;            /* optional, for rounded corners */
+          overflow: hidden;               /* ensures overlay stays inside */
         }
         
-        /* semi-transparent black overlay to create fade effect */
+        /* this overlay covers the ENTIRE div */
         .faded-bg::before {
           content: "";
           position: absolute;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.45);  /* controls the fade strength */
+          inset: 0;                        /* top: 0; right: 0; bottom: 0; left: 0 */
+          background: rgba(0, 0, 0, 0.45); /* fade effect, adjust opacity */
           z-index: 1;
         }
         
-        /* actual content above the overlay */
+        /* this keeps the text above the faded background */
         .faded-bg .content {
           position: relative;
           z-index: 2;
+          color: #fff;
           padding: 2rem;
-          color: white;
         }
+
     </style>
 </head>
 <body>
