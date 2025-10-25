@@ -140,8 +140,8 @@
                         </label>
 
                         <label class="icon-input">
-                            <img src="../img/sere.png" alt="" title="Gem value">
-                            <input type="number" class="input-compact" id="price-gem"  placeholder="0" aria-label="Gem value">
+                            <img src="../img/cert.png" alt="" title="cert">
+                            <input type="number" class="input-compact" id="cert"  placeholder="0" aria-label="cert">
                         </label>
 
                         <label class="icon-input">
@@ -190,20 +190,15 @@
             const master = Number(document.getElementById('master').value||0);
             const green = Number(document.getElementById('green').value||0);
             const shard = Math.max(((Math.max(sere, master)*5)/6), tincs/12);
+            const cert = Number(document.getElementById('cert').value||0);
             const tear = (6*tincs)/58.14 - 9;
             const solo_s87 = ((((7*34.22)*(1+event_drop) + (25*green)*(1+event_drop) + (30*tear)*(1+event_drop) + (12*shard)*(1+event_drop) + 34*tincs + 68*sere + 68*master + (17*253)*(1+event_money) + 17*57 + ((1.9*17)/6)*700)/57)*60)/1000;
             const ardir_b_average = ((tincs*3 + sere*7 + master*7 + (tincs/150)*10*3 + 500)*15)/1000;
+            const d75 = ((2963 + (10/6)*700 + 15*green + 26*cert + 8*shard + 9*tear)/10.57)*60/1000;
             const result = document.getElementById('result');
             
-            const best = Math.max(solo_s87, ardir_b_average);
-            if (best == solo_s87) {
-                result.textContent = `Best Farming Strat =  Solo Sigs87, G/h = ${fmt(solo_s87)}`;
-            } else {
-                result.textContent = `Best Farming Strat =  Solo Ardir Bosses (Average Group), G/h = ${fmt(ardir_b_average)}`;
-            }
-            
             const tbody = document.querySelector('#tbl tbody');
-            tbody.innerHTML = `<tr><td>Solo Sigs87</td><td>${fmt(solo_s87)}</td></tr><tr><td>Ardir Bosses (Average Group)</td><td>${fmt(ardir_b_average)}</td></tr>`;
+            tbody.innerHTML = `<tr><td>Solo Sigs87</td><td>${fmt(solo_s87)}</td></tr><tr><td>Ardir Bosses (Average Group)</td><td>${fmt(ardir_b_average)}</td></tr><tr><td>d75</td><td>${fmt(d75)}</td></tr>`;
             document.getElementById('table-wrap').hidden = false;
             const stamp = document.getElementById('calc-stamp');
             if (stamp) {
@@ -217,6 +212,7 @@
 </body>
 
 </html>
+
 
 
 
