@@ -174,55 +174,44 @@
 
 
     <script>
-        function fmt(n){return (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
-        function compute(){
-            const upp = Number(document.getElementById('upp').value||0);
-
-
-            const result = document.getElementById('result');
-            
-
-            if (upp == 22) {
-                const tbody = document.querySelector('#tbl tbody');
-                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>8865</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>17000</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>17000</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>7300</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>770</td></tr>`;
-                document.getElementById('table-wrap').hidden = false;
-                const stamp = document.getElementById('calc-stamp');
-                if (stamp) {
-                    stamp.classList.add('show');
-                }
-            } else if (upp == 21){
-                const tbody = document.querySelector('#tbl tbody');
-                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>825</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>1586</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>1586</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>689</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>66</td></tr>`;
-                document.getElementById('table-wrap').hidden = false;
-                const stamp = document.getElementById('calc-stamp');
-                if (stamp) {
-                    stamp.classList.add('show');
-                }
-            } else if (upp == 20){
-                const tbody = document.querySelector('#tbl tbody');
-                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>167</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>330</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>330</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>144</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>12</td></tr>`;
-                document.getElementById('table-wrap').hidden = false;
-                const stamp = document.getElementById('calc-stamp');
-                if (stamp) {
-                    stamp.classList.add('show');
-                }
-            } else if (upp == 23){
-                const tbody = document.querySelector('#tbl tbody');
-                tbody.innerHTML = `<tr><td><img src="../img/tinc.png" alt="t" /></td><td>35000</td></tr><tr><td><img src="../img/master.png" alt="m" /></td><td>67000</td></tr><tr><td><img src="../img/sere.png" alt="s" /></td><td>67000</td></tr><tr><td><img src="../img/ref.png" alt="r" /></td><td>29000</td></tr><tr><td><img src="../img/gold.png" alt="g" /></td><td>3080</td></tr>`;
-                document.getElementById('table-wrap').hidden = false;
-                const stamp = document.getElementById('calc-stamp');
-                if (stamp) {
-                    stamp.classList.add('show');
-                }
-            
-            
-            
-            
-            
+      // Map desired UPP -> required materials
+      const DATA = {
+        20: { tinc: 167, master: 330, sere: 330, ref: 144, gold: 12 },
+        21: { tinc: 825, master: 1586, sere: 1586, ref: 689, gold: 66 },
+        22: { tinc: 8865, master: 17000, sere: 17000, ref: 7300, gold: 770 },
+        23: { tinc: 35000, master: 67000, sere: 67000, ref: 29000, gold: 3080 },
+      };
+    
+      function compute() {
+        const upp = Number(document.getElementById('upp').value || 0);
+        const result = document.getElementById('result');
+        const tableWrap = document.getElementById('table-wrap');
+        const tbody = document.querySelector('#tbl tbody');
+        const stamp = document.getElementById('calc-stamp');
+    
+        // No data for this UPP
+        if (!DATA[upp]) {
+          result.textContent = 'No data for this value. Try 20, 21, 22, or 23.';
+          tableWrap.hidden = true;
+          if (stamp) stamp.classList.remove('show');
+          return;
         }
-        document.getElementById('compute').addEventListener('click', compute);
-
-
+    
+        const row = DATA[upp];
+        tbody.innerHTML = `
+          <tr><td><img src="../img/tinc.png" alt="t" /></td><td>${row.tinc}</td></tr>
+          <tr><td><img src="../img/master.png" alt="m" /></td><td>${row.master}</td></tr>
+          <tr><td><img src="../img/sere.png" alt="s" /></td><td>${row.sere}</td></tr>
+          <tr><td><img src="../img/ref.png" alt="r" /></td><td>${row.ref}</td></tr>
+          <tr><td><img src="../img/gold.png" alt="g" /></td><td>${row.gold}</td></tr>
+        `;
+    
+        result.textContent = `Materials for UPP ${upp}`;
+        tableWrap.hidden = false;
+        if (stamp) stamp.classList.add('show');
+      }
+    
+      document.getElementById('compute').addEventListener('click', compute);
     </script>
 </body>
 
