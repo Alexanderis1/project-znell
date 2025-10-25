@@ -111,7 +111,7 @@
             <header class="header">
                 <div class="crumbs"><a href="index.html">Home</a> > <a href="tools.html">Tools</a> > <span>Route Calculator</span></div>
                 <h1>Route Calculator</h1>
-                <p class="muted">Get the optimal Farming Strat based on the market prices</p>
+                <p class="muted">Get the optimal Farming Strat based on the market prices (UPDATED ON HALLOWEEN CHESTS</p>
             </header>
 
 
@@ -183,13 +183,15 @@
     <script>
         function fmt(n){return (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
         function compute(){
+            const event_money = 0.1
+            const event_drop = 0.3
             const tincs = Number(document.getElementById('tincs').value||0);
             const sere = Number(document.getElementById('sere').value||0);
             const master = Number(document.getElementById('master').value||0);
             const green = Number(document.getElementById('green').value||0);
             const shard = Math.max(((Math.max(sere, master)*5)/6), tincs/12);
             const tear = (6*tincs)/58.14 - 9;
-            const solo_s87 = (((7*34.22 + 25*green + 30*tear + 12*shard + 34*tincs + 68*sere + 68*master + 17*310)/57)*60)/1000;
+            const solo_s87 = ((((7*34.22)*(1+event_drop) + (25*green)*(1+event_drop) + (30*tear)*(1+event_drop) + (12*shard)*(1+event_drop) + 34*tincs + 68*sere + 68*master + (17*253)*(1+event_money) + 17*57 + ((1.9*17)/6)*700)/57)*60)/1000;
             const ardir_b_average = ((tincs*3 + sere*7 + master*7 + (tincs/150)*10*3 + 500)*15)/1000;
             const result = document.getElementById('result');
             
@@ -215,6 +217,7 @@
 </body>
 
 </html>
+
 
 
 
